@@ -1,6 +1,6 @@
 package br.edu.impacta.ads;
 
-import java.awt.List;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 import static java.lang.System.out;
@@ -8,7 +8,7 @@ import static java.lang.System.out;
 public class AgendaApp {
 	private static Scanner entrada =  new Scanner(System.in);
 	//private static List<Contato> contatos = new ArrayList<>();
-	private static IContatoDao dao = new ContatoDaoArquivo("contatos.txt")
+	private static IContatoDao dao = new ContatoDaoArquivo("contatos.txt");
 	public static void main(String[] args) {
 		boolean sair = false;
 		while (!sair){
@@ -39,7 +39,69 @@ public class AgendaApp {
 			} catch(Exception e){
 				out.println("ERRO: opção deve ser um valor inteiro!");
 			}
-			return opcao;
+		}
+		return opcao;
+	}
+		
+		private static void inserirContato() {
+			out.println("\nINSERÇÃO DE NOVO CONTATO:");
+			String nome = lerNome();
+			String telefone = lerTelefone();
+			Contato c = new Contato(nome, telefone);
+			//if (contatos.contains(c)){
+			if (dao.existe(c)){
+				out.println("Este contato já está cadastrado!");
+			}
+			else {
+				//contatos.add(c);
+				dao.inserir(c);
+				out.println("contato inserido!");
+			}
+		}
+		
+		private static String lerNome(){
+			boolean valido = false;
+			String nome = "";
+			while (!valido) {
+				out.print("nome: ");
+				nome = entrada.nextLine();
+				if (nome.length()==0 || nome.length()>280){
+					out.println("ERRO: nome de tamanho inválido!");
+				} else {valido = true;}
+			}
+			return nome;
+	}
+	
+	private static String lerTelefone(){
+		boolean valido = false;
+		String telefone = "";
+		while (!valido) {
+			out.print("telefone: ");
+			telefone = entrada.nextLine();
+			if (telefone.length()==0 || telefone.length()>25){
+				out.println("Erro: telefone de tamanho inválido");
+			} else { valido = true;}
+		}
+		return telefone;
+	}
+	
+	private static void buscarContato(){
+		out.println("\nBUSCA DE CONTATOS:");
+		String nome = lerNome();
+		//List<Contato> resultado = new ArrayList<>();
+		//for (Contato c: contatos){
+		//	if (nome.equals(c.getNome())){
+		//		resultado.add(c);
+		//	}
+		//}
+		List<Contato> resultado = dao.buscar(nome);
+		if (resultado.size() == 0) {
+			out.println("Não há contato com este nome!");
+		} else {
+			out.println("\nResultado da busca: ");
+			for (Contato c: resultado) {
+				out.println(c);
+			}
 		}
 	}
 }
