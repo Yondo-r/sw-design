@@ -7,7 +7,8 @@ import static java.lang.System.out;
 
 public class AgendaApp {
 	private static Scanner entrada =  new Scanner(System.in);
-	private static List<Contato> contatos = new ArrayList<>();
+	//private static List<Contato> contatos = new ArrayList<>();
+	private static IContatoDao dao = new ContatoDaoArquivo("contatos.txt")
 	public static void main(String[] args) {
 		boolean sair = false;
 		while (!sair){
@@ -23,7 +24,7 @@ public class AgendaApp {
 	}
 	
 	private static int apresentarMenuPrincipal (){
-		boolean inteiro  = false
+		boolean inteiro  = false;
 		int opcao = 0;
 		while (!inteiro){
 			out.println("\nAGENDA TELEFÔNICA");
